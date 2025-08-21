@@ -2,6 +2,7 @@ import { Heart, Calendar, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 interface GameCardProps {
   title: string;
@@ -12,6 +13,9 @@ interface GameCardProps {
   platform: string;
   isWishlisted?: boolean;
   isUpcoming?: boolean;
+  onWishlistToggle?: (title: string, isWishlisted: boolean) => void;
+  onReminderToggle?: (title: string, hasReminder: boolean) => void;
+  hasReminder?: boolean;
 }
 
 export function GameCard({ 
@@ -22,8 +26,32 @@ export function GameCard({
   genre, 
   platform, 
   isWishlisted = false,
-  isUpcoming = false 
+  isUpcoming = false,
+  onWishlistToggle,
+  onReminderToggle,
+  hasReminder = false
 }: GameCardProps) {
+  const { toast } = useToast();
+
+  const handleWishlistClick = () => {
+    const newWishlistState = !isWishlisted;
+    onWishlistToggle?.(title, newWishlistState);
+    
+    toast({
+      title: newWishlistState ? "Dodato na wishlist! ❤️" : "Uklonjeno sa wishlist",
+      description: `${title} je ${newWishlistState ? 'dodato na' : 'uklonjeno sa'} vašu listu želja.`,
+    });
+  };
+
+  const handleReminderClick = () => {
+    const newReminderState = !hasReminder;
+    onReminderToggle?.(title, newReminderState);
+    
+    toast({
+      title: newReminderState ? "Podsetnik postavljen! 📅" : "Podsetnik uklonjen",
+      description: `${newReminderState ? 'Podsetićemo vas kada' : 'Nećemo više da vas podsetimo za'} ${title} ${newReminderState ? 'izađe' : ''}.`,
+    });
+  };
   return (
     <Card className="gradient-card shadow-card border-border/50 transition-spring hover:scale-105 hover:shadow-elevated">
       <div className="relative">
@@ -33,12 +61,22 @@ export function GameCard({
           className="w-full h-48 object-cover rounded-t-lg"
         />
         <div className="absolute top-2 right-2 flex gap-2">
-          <Button size="sm" variant={isWishlisted ? "default" : "secondary"} className="h-8 w-8 p-0">
-            <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-current' : ''}`} />
+          <Button 
+            size="sm" 
+            variant={isWishlisted ? "default" : "secondary"} 
+            className="h-8 w-8 p-0 transition-all hover:scale-110" 
+            onClick={handleWishlistClick}
+          >
+            <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-current text-red-500' : ''}`} />
           </Button>
           {isUpcoming && (
-            <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
-              <Calendar className="h-4 w-4" />
+            <Button 
+              size="sm" 
+              variant={hasReminder ? "default" : "secondary"} 
+              className="h-8 w-8 p-0 transition-all hover:scale-110"
+              onClick={handleReminderClick}
+            >
+              <Calendar className={`h-4 w-4 ${hasReminder ? 'text-blue-500' : ''}`} />
             </Button>
           )}
         </div>

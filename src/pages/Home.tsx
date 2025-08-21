@@ -2,60 +2,62 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/GameCard";
+import { useGameActions } from "@/hooks/useGameActions";
 import heroImage from "@/assets/gaming-hero.jpg";
 
 const featuredGames = [
   {
     id: 1,
-    title: "Cyberpunk 2077: Phantom Liberty",
+    title: "Counter-Strike 2",
     cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop",
     rating: 9.2,
-    genre: "RPG",
-    platform: "PC, PS5, Xbox",
+    genre: "FPS",
+    platform: "PC, Steam",
     isWishlisted: true,
   },
   {
     id: 2,
-    title: "The Legend of Zelda: Tears of the Kingdom",
+    title: "Call of Duty: Modern Warfare III",
     cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop",
-    rating: 9.6,
-    genre: "Adventure",
-    platform: "Nintendo Switch",
+    rating: 8.8,
+    genre: "FPS",
+    platform: "PC, PS5, Xbox",
   },
   {
     id: 3,
-    title: "Starfield",
+    title: "The Legend of Zelda: Tears of the Kingdom",
     cover: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400&h=300&fit=crop",
-    rating: 8.7,
-    genre: "Sci-Fi RPG",
-    platform: "PC, Xbox",
+    rating: 9.6,
+    genre: "Adventure",
+    platform: "Nintendo Switch",
   },
 ];
 
 const upcomingGames = [
   {
     id: 4,
-    title: "Grand Theft Auto VI",
+    title: "Call of Duty: Black Ops 6",
     cover: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop",
+    rating: 9.1,
+    releaseDate: "29. august 2024",
+    genre: "FPS",
+    platform: "PC, PS5, Xbox",
+    isUpcoming: true,
+  },
+  {
+    id: 5,
+    title: "Grand Theft Auto VI",
+    cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
     rating: 9.8,
     releaseDate: "2025",
     genre: "Action",
     platform: "PS5, Xbox, PC",
     isUpcoming: true,
   },
-  {
-    id: 5,
-    title: "Elder Scrolls VI",
-    cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-    rating: 9.5,
-    releaseDate: "TBA",
-    genre: "RPG",
-    platform: "PC, Xbox",
-    isUpcoming: true,
-  },
 ];
 
 export default function Home() {
+  const { toggleWishlist, toggleReminder, getGameState } = useGameActions();
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -93,9 +95,19 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 gap-4">
-            {featuredGames.map((game) => (
-              <GameCard key={game.id} {...game} />
-            ))}
+            {featuredGames.map((game) => {
+              const gameState = getGameState(game.title);
+              return (
+                <GameCard 
+                  key={game.id} 
+                  {...game} 
+                  isWishlisted={gameState.isWishlisted || game.isWishlisted}
+                  hasReminder={gameState.hasReminder}
+                  onWishlistToggle={toggleWishlist}
+                  onReminderToggle={toggleReminder}
+                />
+              );
+            })}
           </div>
         </section>
 
@@ -109,9 +121,19 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 gap-4">
-            {upcomingGames.map((game) => (
-              <GameCard key={game.id} {...game} />
-            ))}
+            {upcomingGames.map((game) => {
+              const gameState = getGameState(game.title);
+              return (
+                <GameCard 
+                  key={game.id} 
+                  {...game} 
+                  isWishlisted={gameState.isWishlisted}
+                  hasReminder={gameState.hasReminder}
+                  onWishlistToggle={toggleWishlist}
+                  onReminderToggle={toggleReminder}
+                />
+              );
+            })}
           </div>
         </section>
       </div>

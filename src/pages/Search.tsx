@@ -4,34 +4,59 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/GameCard";
 import { Badge } from "@/components/ui/badge";
+import { useGameActions } from "@/hooks/useGameActions";
 
-const genres = ["Akcija", "RPG", "Strategija", "Simulacija", "Sport", "Trka"];
+const genres = ["FPS", "RPG", "Akcija", "Strategija", "Adventure", "Sport"];
 const platforms = ["PC", "PlayStation", "Xbox", "Nintendo Switch", "Mobilni"];
 
 const searchResults = [
   {
     id: 1,
-    title: "Elden Ring",
+    title: "Counter-Strike 2",
     cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop",
-    rating: 9.4,
-    genre: "RPG",
-    platform: "PC, PS5, Xbox",
+    rating: 9.2,
+    genre: "FPS",
+    platform: "PC, Steam",
   },
   {
     id: 2,
-    title: "God of War Ragnarök",
+    title: "Valorant",
     cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=300&fit=crop",
-    rating: 9.1,
-    genre: "Akcija",
-    platform: "PS5, PS4",
+    rating: 8.9,
+    genre: "FPS",
+    platform: "PC",
   },
   {
     id: 3,
-    title: "Horizon Forbidden West",
+    title: "Call of Duty: Modern Warfare III",
     cover: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400&h=300&fit=crop",
-    rating: 8.9,
+    rating: 8.8,
+    genre: "FPS",
+    platform: "PC, PS5, Xbox",
+  },
+  {
+    id: 4,
+    title: "Apex Legends",
+    cover: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop",
+    rating: 8.7,
+    genre: "FPS",
+    platform: "PC, PS5, Xbox",
+  },
+  {
+    id: 5,
+    title: "The Legend of Zelda: Tears of the Kingdom",
+    cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+    rating: 9.6,
+    genre: "Adventure",
+    platform: "Nintendo Switch",
+  },
+  {
+    id: 6,
+    title: "Cyberpunk 2077",
+    cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop",
+    rating: 8.5,
     genre: "RPG",
-    platform: "PS5, PS4, PC",
+    platform: "PC, PS5, Xbox",
   },
 ];
 
@@ -39,6 +64,7 @@ export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const { toggleWishlist, toggleReminder, getGameState } = useGameActions();
 
   const toggleGenre = (genre: string) => {
     setSelectedGenres(prev => 
@@ -121,9 +147,19 @@ export default function Search() {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Rezultati pretrage ({searchResults.length})</h2>
         <div className="grid grid-cols-1 gap-4">
-          {searchResults.map((game) => (
-            <GameCard key={game.id} {...game} />
-          ))}
+          {searchResults.map((game) => {
+            const gameState = getGameState(game.title);
+            return (
+              <GameCard 
+                key={game.id} 
+                {...game} 
+                isWishlisted={gameState.isWishlisted}
+                hasReminder={gameState.hasReminder}
+                onWishlistToggle={toggleWishlist}
+                onReminderToggle={toggleReminder}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
