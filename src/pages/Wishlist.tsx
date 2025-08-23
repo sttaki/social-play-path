@@ -2,6 +2,7 @@ import { Heart, Calendar, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/GameCard";
 import { Badge } from "@/components/ui/badge";
+import { useGameActions } from "@/hooks/useGameActions";
 
 const wishlistGames = [
   {
@@ -38,6 +39,8 @@ const wishlistGames = [
 ];
 
 export default function Wishlist() {
+  const { toggleWishlist, toggleReminder, getGameState } = useGameActions();
+  
   return (
     <div className="min-h-screen p-4">
       <div className="mb-6">
@@ -98,18 +101,19 @@ export default function Wishlist() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
-            {wishlistGames.map((game) => (
-              <div key={game.id} className="relative">
-                <GameCard {...game} />
-                {game.isUpcoming && (
-                  <Badge 
-                    className="absolute top-2 left-2 gradient-primary animate-pulse"
-                  >
-                    Podsetnik aktivan
-                  </Badge>
-                )}
-              </div>
-            ))}
+            {wishlistGames.map((game) => {
+              const gameState = getGameState(game.title);
+              return (
+                <GameCard 
+                  key={game.id} 
+                  {...game} 
+                  isWishlisted={gameState.isWishlisted || game.isWishlisted}
+                  hasReminder={gameState.hasReminder}
+                  onWishlistToggle={toggleWishlist}
+                  onReminderToggle={toggleReminder}
+                />
+              );
+            })}
           </div>
         )}
       </div>
