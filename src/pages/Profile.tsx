@@ -1,8 +1,10 @@
-import { User, Settings, Heart, Calendar, Trophy, Star, GamepadIcon } from "lucide-react";
+import { User, Settings, Heart, Calendar, Trophy, Star, GamepadIcon, UserPlus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const userStats = {
   gamesInWishlist: 12,
@@ -37,7 +39,64 @@ const recentActivity = [
 
 const favoriteGenres = ["RPG", "Akcija", "Strategija", "Simulacija"];
 
+const suggestedFriends = [
+  {
+    id: 1,
+    name: "Ana Jovanović",
+    avatar: "https://images.unsplash.com/photo-1494790108755-2616b68fcf65?w=100&h=100&fit=crop",
+    level: 12,
+    sharedGames: 8,
+    mutualFriends: 3,
+  },
+  {
+    id: 2,
+    name: "Stefan Nikolić",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    level: 18,
+    sharedGames: 12,
+    mutualFriends: 5,
+  },
+  {
+    id: 3,
+    name: "Milica Stojanović",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    level: 9,
+    sharedGames: 6,
+    mutualFriends: 2,
+  },
+  {
+    id: 4,
+    name: "Nenad Petrović",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+    level: 14,
+    sharedGames: 15,
+    mutualFriends: 7,
+  },
+];
+
 export default function Profile() {
+  const [showFriendSearch, setShowFriendSearch] = useState(false);
+  const [addedFriends, setAddedFriends] = useState<number[]>([]);
+  const { toast } = useToast();
+
+  const handleFindFriends = () => {
+    setShowFriendSearch(!showFriendSearch);
+    if (!showFriendSearch) {
+      toast({
+        title: "Pretražujemo prijatelje... 🔍",
+        description: "Našli smo gamere sa sličnim interesovanjima!",
+      });
+    }
+  };
+
+  const handleAddFriend = (friendId: number, friendName: string) => {
+    setAddedFriends(prev => [...prev, friendId]);
+    toast({
+      title: "Zahtev za prijateljstvo poslat! 👥",
+      description: `Poslali ste zahtev za prijateljstvo ${friendName}.`,
+    });
+  };
+
   return (
     <div className="min-h-screen p-4">
       {/* Profile Header */}
@@ -138,11 +197,64 @@ export default function Profile() {
           Upravljaj wishlistom
         </Button>
         
-        <Button variant="outline" className="w-full" size="lg">
+        <Button variant="outline" className="w-full" size="lg" onClick={handleFindFriends}>
           <User className="h-5 w-5 mr-2" />
-          Pronađi prijatelje
+          {showFriendSearch ? 'Sakrij rezultate' : 'Pronađi prijatelje'}
         </Button>
       </div>
+
+      {/* Friend Search Results */}
+      {showFriendSearch && (
+        <Card className="gradient-card p-4 mt-6">
+          <h3 className="font-semibold mb-4 flex items-center gap-2">
+            <Users className="h-5 w-5 text-primary" />
+            Predloženi prijatelji ({suggestedFriends.length})
+          </h3>
+          <div className="space-y-3">
+            {suggestedFriends.map((friend) => (
+              <div key={friend.id} className="flex items-center gap-3 p-3 rounded-lg border border-border/50">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={friend.avatar} />
+                  <AvatarFallback>
+                    <User className="h-6 w-6" />
+                  </AvatarFallback>
+                </Avatar>
+                
+                <div className="flex-1">
+                  <h4 className="font-medium">{friend.name}</h4>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Trophy className="h-3 w-3" />
+                      Level {friend.level}
+                    </span>
+                    <span>{friend.sharedGames} zajedničkih igara</span>
+                    <span>{friend.mutualFriends} zajedničkih prijatelja</span>
+                  </div>
+                </div>
+                
+                <Button 
+                  size="sm" 
+                  variant={addedFriends.includes(friend.id) ? "secondary" : "default"}
+                  disabled={addedFriends.includes(friend.id)}
+                  onClick={() => handleAddFriend(friend.id, friend.name)}
+                >
+                  {addedFriends.includes(friend.id) ? (
+                    <>
+                      <Users className="h-3 w-3 mr-1" />
+                      Poslato
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="h-3 w-3 mr-1" />
+                      Dodaj
+                    </>
+                  )}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
