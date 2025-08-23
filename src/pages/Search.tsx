@@ -82,6 +82,19 @@ export default function Search() {
     );
   };
 
+  const filteredGames = searchResults.filter(game => {
+    const matchesSearch = searchQuery === "" || 
+      game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      game.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      game.platform.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesGenre = selectedGenres.length === 0 || selectedGenres.includes(game.genre);
+    const matchesPlatform = selectedPlatforms.length === 0 || 
+      selectedPlatforms.some(platform => game.platform.toLowerCase().includes(platform.toLowerCase()));
+    
+    return matchesSearch && matchesGenre && matchesPlatform;
+  });
+
   return (
     <div className="min-h-screen p-4">
       <div className="mb-6">
@@ -145,9 +158,9 @@ export default function Search() {
 
       {/* Results */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Rezultati pretrage ({searchResults.length})</h2>
+        <h2 className="text-xl font-semibold">Rezultati pretrage ({filteredGames.length})</h2>
         <div className="grid grid-cols-1 gap-4">
-          {searchResults.map((game) => {
+          {filteredGames.map((game) => {
             const gameState = getGameState(game.title);
             return (
               <GameCard 
