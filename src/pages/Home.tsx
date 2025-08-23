@@ -1,5 +1,3 @@
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/GameCard";
 import { useGameActions } from "@/hooks/useGameActions";
@@ -76,15 +74,6 @@ export default function Home() {
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Search Bar */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input 
-            placeholder="Pretraži igre..." 
-            className="pl-10 bg-card/50 backdrop-blur border-border/50"
-          />
-        </div>
-
         {/* Top Games */}
         <section>
           <div className="flex items-center justify-between mb-4">
