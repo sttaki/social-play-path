@@ -1,4 +1,4 @@
-import { Heart, Calendar, Star } from "lucide-react";
+import { Heart, Calendar, Star, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,7 @@ interface GameCardProps {
   onWishlistToggle?: (title: string, isWishlisted: boolean) => void;
   onReminderToggle?: (title: string, hasReminder: boolean) => void;
   hasReminder?: boolean;
+  trailerUrl?: string;
 }
 
 export function GameCard({ 
@@ -29,7 +30,8 @@ export function GameCard({
   isUpcoming = false,
   onWishlistToggle,
   onReminderToggle,
-  hasReminder = false
+  hasReminder = false,
+  trailerUrl
 }: GameCardProps) {
   const { toast } = useToast();
 
@@ -51,6 +53,16 @@ export function GameCard({
       title: newReminderState ? "Podsetnik postavljen! 📅" : "Podsetnik uklonjen",
       description: `${newReminderState ? 'Podsetićemo vas kada' : 'Nećemo više da vas podsetimo za'} ${title} ${newReminderState ? 'izađe' : ''}.`,
     });
+  };
+
+  const handleTrailerClick = () => {
+    if (trailerUrl) {
+      window.open(trailerUrl, '_blank');
+      toast({
+        title: "Pokretam trailer! 🎬",
+        description: `Otvaramo trailer za ${title}.`,
+      });
+    }
   };
   return (
     <Card className="gradient-card shadow-card border-border/50 transition-spring hover:scale-105 hover:shadow-elevated">
@@ -98,12 +110,23 @@ export function GameCard({
           <Badge variant="secondary">{genre}</Badge>
         </div>
         
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-muted-foreground">{platform}</span>
           {releaseDate && (
             <span className="text-sm text-muted-foreground">{releaseDate}</span>
           )}
         </div>
+        
+        {trailerUrl && (
+          <Button 
+            className="w-full gradient-primary" 
+            size="sm"
+            onClick={handleTrailerClick}
+          >
+            <Play className="h-4 w-4 mr-2" />
+            Gledaj trailer
+          </Button>
+        )}
       </div>
     </Card>
   );

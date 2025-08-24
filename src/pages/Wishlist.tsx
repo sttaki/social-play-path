@@ -24,6 +24,7 @@ const wishlistGames = [
     platform: "PS5, Xbox, PC",
     isUpcoming: true,
     isWishlisted: true,
+    trailerUrl: "https://www.youtube.com/watch?v=VQRLujxTm3c",
   },
   {
     id: 3,
