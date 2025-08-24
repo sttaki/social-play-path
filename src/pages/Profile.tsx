@@ -1,8 +1,10 @@
-import { User, Settings, Heart, Calendar, Trophy, Star, GamepadIcon, UserPlus, Users } from "lucide-react";
+import { User, Settings, Heart, Calendar, Trophy, Star, GamepadIcon, UserPlus, Users, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -77,17 +79,20 @@ const suggestedFriends = [
 export default function Profile() {
   const [showFriendSearch, setShowFriendSearch] = useState(false);
   const [addedFriends, setAddedFriends] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
   const handleFindFriends = () => {
-    setShowFriendSearch(!showFriendSearch);
-    if (!showFriendSearch) {
-      toast({
-        title: "Pretražujemo prijatelje... 🔍",
-        description: "Našli smo gamere sa sličnim interesovanjima!",
-      });
-    }
+    setShowFriendSearch(true);
+    toast({
+      title: "Pretražujemo prijatelje... 🔍",
+      description: "Našli smo gamere sa sličnim interesovanjima!",
+    });
   };
+
+  const filteredFriends = suggestedFriends.filter(friend =>
+    friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleAddFriend = (friendId: number, friendName: string) => {
     setAddedFriends(prev => [...prev, friendId]);
@@ -199,20 +204,35 @@ export default function Profile() {
         
         <Button variant="outline" className="w-full" size="lg" onClick={handleFindFriends}>
           <User className="h-5 w-5 mr-2" />
-          {showFriendSearch ? 'Sakrij rezultate' : 'Pronađi prijatelje'}
+          Pronađi prijatelje
         </Button>
       </div>
 
-      {/* Friend Search Results */}
-      {showFriendSearch && (
-        <Card className="gradient-card p-4 mt-6">
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <Users className="h-5 w-5 text-primary" />
-            Predloženi prijatelji ({suggestedFriends.length})
-          </h3>
-          <div className="space-y-3">
-            {suggestedFriends.map((friend) => (
-              <div key={friend.id} className="flex items-center gap-3 p-3 rounded-lg border border-border/50">
+      {/* Friend Search Modal */}
+      <Dialog open={showFriendSearch} onOpenChange={setShowFriendSearch}>
+        <DialogContent className="max-w-md max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              Pronađi prijatelje
+            </DialogTitle>
+          </DialogHeader>
+          
+          {/* Search Bar */}
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Pretraži po imenu..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          
+          {/* Friends List */}
+          <div className="flex-1 overflow-y-auto space-y-3">
+            {filteredFriends.map((friend) => (
+              <div key={friend.id} className="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 transition-colors">
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={friend.avatar} />
                   <AvatarFallback>
@@ -220,15 +240,14 @@ export default function Profile() {
                   </AvatarFallback>
                 </Avatar>
                 
-                <div className="flex-1">
-                  <h4 className="font-medium">{friend.name}</h4>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium truncate">{friend.name}</h4>
+                  <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Trophy className="h-3 w-3" />
                       Level {friend.level}
                     </span>
-                    <span>{friend.sharedGames} zajedničkih igara</span>
-                    <span>{friend.mutualFriends} zajedničkih prijatelja</span>
+                    <span>{friend.sharedGames} zajedničkih</span>
                   </div>
                 </div>
                 
@@ -252,9 +271,16 @@ export default function Profile() {
                 </Button>
               </div>
             ))}
+            
+            {filteredFriends.length === 0 && searchQuery && (
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p>Nema rezultata za "{searchQuery}"</p>
+              </div>
+            )}
           </div>
-        </Card>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
