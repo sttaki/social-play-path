@@ -12,7 +12,7 @@ const gameReleases = [
   {
     id: 1,
     title: "Tekken 8",
-    date: new Date(2024, 1, 26), // January 26, 2024
+    date: new Date(2026, 1, 26), // January 26, 2026
     cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop",
     platform: "PC, PS5, Xbox",
     hasReminder: true,
@@ -20,7 +20,7 @@ const gameReleases = [
   {
     id: 2,
     title: "Granblue Fantasy Relink", 
-    date: new Date(2024, 1, 1), // February 1, 2024
+    date: new Date(2026, 1, 1), // February 1, 2026
     cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=100&h=100&fit=crop",
     platform: "PS5, PC",
     hasReminder: false,
@@ -28,7 +28,7 @@ const gameReleases = [
   {
     id: 3,
     title: "Helldivers 2",
-    date: new Date(2024, 1, 8), // February 8, 2024
+    date: new Date(2026, 1, 8), // February 8, 2026
     cover: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=100&h=100&fit=crop",
     platform: "PS5, PC", 
     hasReminder: true,
@@ -36,7 +36,7 @@ const gameReleases = [
   {
     id: 4,
     title: "Final Fantasy VII Rebirth",
-    date: new Date(2024, 1, 29), // February 29, 2024
+    date: new Date(2026, 1, 28), // February 28, 2026
     cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop",
     platform: "PS5 Ekskluzivno",
     hasReminder: true,
@@ -44,7 +44,7 @@ const gameReleases = [
   {
     id: 5,
     title: "Call of Duty: Black Ops 6",
-    date: new Date(2024, 7, 29), // August 29, 2024
+    date: new Date(2026, 7, 29), // August 29, 2026
     cover: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=100&h=100&fit=crop",
     platform: "PC, PS5, Xbox",
     hasReminder: false,
@@ -55,8 +55,8 @@ const upcomingReleases = [
   {
     id: 1,
     title: "Tekken 8",
-    releaseDate: "26. januar 2024",
-    daysLeft: 15,
+    releaseDate: "26. januar 2026",
+    daysLeft: 380,
     cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop",
     platform: "PC, PS5, Xbox",
     hasReminder: true,
@@ -64,8 +64,8 @@ const upcomingReleases = [
   {
     id: 2,
     title: "Granblue Fantasy Relink",
-    releaseDate: "1. februar 2024",
-    daysLeft: 21,
+    releaseDate: "1. februar 2026",
+    daysLeft: 386,
     cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=100&h=100&fit=crop",
     platform: "PS5, PC",
     hasReminder: false,
@@ -73,8 +73,8 @@ const upcomingReleases = [
   {
     id: 3,
     title: "Helldivers 2",
-    releaseDate: "8. februar 2024",
-    daysLeft: 28,
+    releaseDate: "8. februar 2026",
+    daysLeft: 393,
     cover: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=100&h=100&fit=crop",
     platform: "PS5, PC",
     hasReminder: true,
@@ -82,8 +82,8 @@ const upcomingReleases = [
   {
     id: 4,
     title: "Final Fantasy VII Rebirth",
-    releaseDate: "29. februar 2024",
-    daysLeft: 49,
+    releaseDate: "28. februar 2026",
+    daysLeft: 413,
     cover: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop",
     platform: "PS5 Ekskluzivno",
     hasReminder: true,
