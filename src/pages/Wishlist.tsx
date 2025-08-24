@@ -54,14 +54,14 @@ export default function Wishlist() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="gradient-card p-4 rounded-lg text-center">
           <div className="text-2xl font-bold text-primary">{wishlistGames.length}</div>
           <div className="text-sm text-muted-foreground">Ukupno igara</div>
         </div>
         <div className="gradient-card p-4 rounded-lg text-center">
           <div className="text-2xl font-bold text-primary">
-            {wishlistGames.filter(g => g.isUpcoming).length}
+            {wishlistGames.filter(g => grid-cols-1 sm:grid-cols-3ing).length}
           </div>
           <div className="text-sm text-muted-foreground">Uskoro</div>
         </div>
