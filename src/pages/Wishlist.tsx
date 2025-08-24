@@ -107,7 +107,7 @@ export default function Wishlist() {
                 <GameCard 
                   key={game.id} 
                   {...game} 
-                  isWishlisted={gameState.isWishlisted || game.isWishlisted}
+                  isWishlisted={gameState.isWishlisted !== undefined ? gameState.isWishlisted : game.isWishlisted}
                   hasReminder={gameState.hasReminder}
                   onWishlistToggle={toggleWishlist}
                   onReminderToggle={toggleReminder}
